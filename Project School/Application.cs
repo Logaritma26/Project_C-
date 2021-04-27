@@ -39,7 +39,7 @@ namespace Project_School
             {
                 Console.WriteLine("Adding new contact . . . ");
             }
-            
+
             Console.WriteLine("Enter contact name : ");
             var name = Console.ReadLine();
 
@@ -134,7 +134,7 @@ namespace Project_School
                 AddContact(selection);
             }
         }
-        
+
         public void DeleteContact()
         {
             var selection = -1;
@@ -160,11 +160,10 @@ namespace Project_School
             _contacts.RemoveAt(selection);
         }
 
-        
+
         public void SearchContacts()
         {
             var selection = -1;
-            var hasError = false;
 
             Console.WriteLine();
             Console.WriteLine("1-) Search by Name");
@@ -173,7 +172,7 @@ namespace Project_School
             Console.WriteLine("4-) Search by Birth Date");
             Console.WriteLine("5-) Search by Telephone Number");
             Console.WriteLine();
-            
+
             try
             {
                 selection = Convert.ToInt32(Console.ReadLine());
@@ -185,10 +184,9 @@ namespace Project_School
             catch (Exception)
             {
                 Console.WriteLine("Please use only numbers according to menu !");
-                hasError = true;
+                return;
             }
 
-            if (hasError) return;
             switch (selection)
             {
                 case 1:
@@ -210,60 +208,111 @@ namespace Project_School
                     Console.WriteLine("Please select only numbers according to menu !");
                     break;
             }
-
         }
 
         private void SearchByName()
         {
             Console.WriteLine("Enter the name you want to search for: ");
-            var name = Console.ReadLine();
+            string name;
+            try
+            {
+                name = Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
 
             foreach (var contact in _contacts.Where(contact => contact.Name == name))
             {
                 contact.PrintProperties();
             }
         }
+
         private void SearchBySurname()
         {
             Console.WriteLine("Enter the surname you want to search for: ");
-            var surname = Console.ReadLine();
+            string surname;
+
+            try
+            {
+                surname = Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
 
             foreach (var contact in _contacts.Where(contact => contact.Surname == surname))
             {
                 contact.PrintProperties();
             }
         }
+
         private void SearchByEmail()
         {
             Console.WriteLine("Enter the email you want to search for: ");
-            var email = Console.ReadLine();
+            string email;
+
+            try
+            {
+                email = Console.ReadLine();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
 
             foreach (var contact in _contacts.Where(contact => contact.Email == email))
             {
                 contact.PrintProperties();
             }
         }
+
         private void SearchByTelNumber()
         {
             Console.WriteLine("Enter the telephone number you want to search for: ");
-            var number = Convert.ToInt64(Console.ReadLine());
+            long number;
+
+            try
+            {
+                number = Convert.ToInt64(Console.ReadLine());
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
 
             foreach (var contact in _contacts.Where(contact => contact.TelephoneNumber == number))
             {
                 contact.PrintProperties();
             }
         }
+
         private void SearchByBirthDate()
         {
             Console.WriteLine("Enter the birth date as 'dd-MM-yyyy' you want to search for: ");
-            var date = Convert.ToDateTime(DateTime.ParseExact(Console.ReadLine()!, "dd-MM-yyyy",
-                CultureInfo.InvariantCulture));
+            DateTime date;
+
+            try
+            {
+                date = Convert.ToDateTime(DateTime.ParseExact(Console.ReadLine()!, "dd-MM-yyyy",
+                    CultureInfo.InvariantCulture));
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+                return;
+            }
 
             foreach (var contact in _contacts.Where(contact => contact.DateOfBirth == date))
             {
                 contact.PrintProperties();
             }
         }
-        
     }
 }
