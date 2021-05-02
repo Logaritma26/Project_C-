@@ -2,7 +2,7 @@ using System;
 
 namespace Project_School
 {
-    internal class Contact
+    public class Contact
     {
         public string Name { get; set; }
 
@@ -22,12 +22,12 @@ namespace Project_School
             DateOfBirth = dateOfBirth;
             TelephoneNumber = telephoneNumber;
         }
-        
+
 
         public void PrintProperties()
         {
             Console.WriteLine(
-                $"Name: {Name}, Surname: {Surname}, Email: {Email}, Birth Date: {DateOfBirth:dd/MM/yyyy}, Number: {TelephoneNumber}");
+                $"Name: {Name}, Surname: {Surname}, Email: {Email}, Birth Date: {DateOfBirth:dd/MM/yyyy}, Number: +{TelephoneNumber}");
         }
     }
 }

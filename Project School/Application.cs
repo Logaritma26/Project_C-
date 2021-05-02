@@ -6,24 +6,24 @@ namespace Project_School
     using System.Collections.Generic;
     using System.Globalization;
 
-    internal class Application
+    internal class Application : Validations
     {
         private readonly List<Contact> _contacts = new();
 
         public Application()
         {
-            var contact1 = new Contact("person1", "person1", "person1",
-                DateTime.ParseExact("01-01-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 111);
-            var contact2 = new Contact("person2", "person2", "person2",
-                DateTime.ParseExact("02-02-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 222);
-            var contact3 = new Contact("person3", "person3", "person3",
-                DateTime.ParseExact("03-03-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 333);
-            var contact4 = new Contact("person4", "person4", "person4",
-                DateTime.ParseExact("27-04-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 444);
-            var contact5 = new Contact("person5", "person5", "person5",
-                DateTime.ParseExact("05-05-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 555);
-            var contact6 = new Contact("person6", "person6", "person6",
-                DateTime.ParseExact("06-06-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 666);
+            var contact1 = new Contact("Andrew", "Smith", "andrew@gmail.com",
+                DateTime.ParseExact("01-01-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 48725552410);
+            var contact2 = new Contact("Lily", "Johnson", "lily@gmail.com",
+                DateTime.ParseExact("02-02-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 48515552629);
+            var contact3 = new Contact("Marcus", "Miller", "marcus@gmail.com",
+                DateTime.ParseExact("03-03-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 48505559772);
+            var contact4 = new Contact("Tom", "Moore", "tommoore@gmail.com",
+                DateTime.ParseExact("27-04-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 48695554577);
+            var contact5 = new Contact("Rupert", "Lee", "ruplee@gmail.com",
+                DateTime.ParseExact("05-05-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 48735553619);
+            var contact6 = new Contact("Ethan", "White", "ewhite@gmail.com",
+                DateTime.ParseExact("06-06-1980", "dd-MM-yyyy", CultureInfo.InvariantCulture), 48785554664);
 
             _contacts.Add(contact1);
             _contacts.Add(contact2);
@@ -40,24 +40,39 @@ namespace Project_School
                 Console.WriteLine("Adding new contact . . . ");
             }
 
-            Console.WriteLine("Enter contact name : ");
-            var name = Console.ReadLine();
+            var name = ValidatedString("name");
+            if (name == null)
+            {
+                return;
+            }
 
-            Console.WriteLine("Enter contact surname : ");
-            var surname = Console.ReadLine();
+            var surname = ValidatedString("surname");
+            if (surname == null)
+            {
+                return;
+            }
 
-            Console.WriteLine("Enter contact email : ");
-            var email = Console.ReadLine();
+            var email = ValidatedEmail();
+            if (email == null)
+            {
+                return;
+            }
 
-            Console.WriteLine("Enter contact birth date as dd-MM-yyyy : ");
-            var dateOfBirth =
-                Convert.ToDateTime(DateTime.ParseExact(Console.ReadLine()!, "dd-MM-yyyy",
-                    CultureInfo.InvariantCulture));
 
-            Console.WriteLine("Enter contact telephone number : ");
-            var telephoneNumber = Convert.ToInt64(Console.ReadLine());
+            var dateOfBirth = ValidatedBirthDate();
+            if (dateOfBirth == null)
+            {
+                return;
+            }
 
-            var contact = new Contact(name, surname, email, dateOfBirth, telephoneNumber);
+            var telephoneNumber = ValidatedTelephoneNumber();
+            if (telephoneNumber == null)
+            {
+                return;
+            }
+
+            var contact = new Contact((string) name, (string) surname, (string) email, (DateTime) dateOfBirth,
+                (long) telephoneNumber);
 
             if (index == -1)
             {
@@ -71,15 +86,8 @@ namespace Project_School
             }
         }
 
-        public void PrintAll()
-        {
-            Console.WriteLine("Printing contacts . . . ");
-            for (var i = 0; i < _contacts.Count; i++)
-            {
-                Console.Write($"{i + 1}-)");
-                _contacts[i].PrintProperties();
-            }
-        }
+
+        public void PrintAll() => PrintAll(_contacts);
 
         public void CheckBirthDate()
         {
@@ -137,8 +145,7 @@ namespace Project_School
 
         public void DeleteContact()
         {
-            var selection = -1;
-            var hasError = false;
+            int selection;
             PrintAll();
             Console.Write("Please select the contact you want to delete :");
             try
@@ -151,19 +158,17 @@ namespace Project_School
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
-                hasError = true;
+                Console.WriteLine("Please select proper values !");
+                return;
                 //throw;
             }
 
-            if (hasError) return;
             _contacts.RemoveAt(selection);
         }
 
-
         public void SearchContacts()
         {
-            var selection = -1;
+            int selection;
 
             Console.WriteLine();
             Console.WriteLine("1-) Search by Name");
@@ -203,9 +208,6 @@ namespace Project_School
                     break;
                 case 5:
                     SearchByTelNumber();
-                    break;
-                default:
-                    Console.WriteLine("Please select only numbers according to menu !");
                     break;
             }
         }
